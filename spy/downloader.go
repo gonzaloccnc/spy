@@ -9,7 +9,7 @@ import (
 	"github.com/zmb3/spotify/v2"
 )
 
-func Downloader(url string, track spotify.FullTrack) {
+func Downloader(url string, track spotify.FullTrack) string {
 	nameTag := fmt.Sprintf("%s.mp3", track.Name)
 
 	ytdlCmd := exec.Command(
@@ -36,4 +36,6 @@ func Downloader(url string, track spotify.FullTrack) {
 	}
 
 	utils.TagFileWithSpotifyMetadata(nameTag, track)
+
+	return track.Name
 }

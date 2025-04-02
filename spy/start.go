@@ -10,7 +10,7 @@ import (
 	"github.com/zmb3/spotify/v2"
 )
 
-func DownloadPlaylist(ctx context.Context, pid string) {
+func DownloadPlaylist(ctx context.Context, pid string) string {
 	user := InitAuth()
 	cli := UserData{
 		UserClient: user,
@@ -41,10 +41,10 @@ func DownloadPlaylist(ctx context.Context, pid string) {
 		}
 	}
 
-	DownloadTrackList(cli)
+	return DownloadTrackList(cli)
 }
 
-func DownloadTrackList(cli UserData) {
+func DownloadTrackList(cli UserData) string {
 	fmt.Println("Found", len(cli.TrackList), "tracks")
 	fmt.Println("Searching and downloading tracks")
 
@@ -61,10 +61,15 @@ func DownloadTrackList(cli UserData) {
 		}
 		cli.YoutubeIDList = append(cli.YoutubeIDList, youtubeID)
 	}
+
+	var name string
+
 	for index, track := range cli.YoutubeIDList {
 		ytURL := "https://www.youtube.com/watch?v=" + track
-		Downloader(ytURL, cli.TrackList[index])
+		name = Downloader(ytURL, cli.TrackList[index])
 		fmt.Println()
 	}
-	fmt.Println("Download complete!")
+	fmt.Println("Download complete!" + name)
+	// this return only the latest download
+	return name
 }
